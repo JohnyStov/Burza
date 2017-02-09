@@ -1,0 +1,31 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:p="http://primefaces.org/ui" xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:h="http://xmlns.jcp.org/jsf/html" xmlns:ui="http://xmlns.jcp.org/jsf/facelets" xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+	<h:outputScript library="js" name="localization.js" />
+
+	<h:form prependId="false">
+		<h2>#{msg['welcomeView.caption']}</h2>
+		<p:separator />
+		<h:outputText value="#{msg['welcomeView.text']}" />
+
+		<p:panel header="Client">
+			<h:form>
+				<h:dataTable var="item" value="#{contactView.props}">
+					<h:column>
+						<p:outputLabel for="item" value="#{msg[item.title]}" rendered="#{item.valueType=='String'}" />
+						<p:outputLabel for="pickupDate" value="#{msg['reservation.pickupDate']}" rendered="#{item.valueType=='Date'}" />
+					</h:column>
+					<h:column>
+						<p:inputText id="item" value="#{item.value}" rendered="#{item.valueType=='String'}" />
+						<p:calendar id="pickupDate" required="true" locale="#{idiomaBean.currentLanguage}" value="#{item.value}" rendered="#{item.valueType=='Date'}"
+							effect="slide" />
+					</h:column>
+				</h:dataTable>
+				<div style="float: right;">
+					<p:commandButton value="Save" ajax="false" update="welcomeView" icon="ui-icon-check" validateClient="true"
+						actionListener="#{contactView.onSubmit2}" />
+				</div>
+			</h:form>
+		</p:panel>
+		<p:separator />
+	</h:form>
+</ui:composition>

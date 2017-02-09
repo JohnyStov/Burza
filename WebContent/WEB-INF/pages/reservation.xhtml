@@ -1,0 +1,137 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:p="http://primefaces.org/ui" xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:h="http://xmlns.jcp.org/jsf/html" xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+	<h2>
+		<h:outputText value="#{msg['menu.reservation']}" />
+	</h2>
+	<p:separator />
+
+	<h:outputText value="#{msg['reservationView.text']}" />
+	<h:form id="reservationForm">
+		<p:messages id="messages" />
+
+		<p:panelGrid columns="2">
+			<p:outputLabel for="services" value="#{msg['reservation.services']}" />
+			<p:selectOneMenu id="services" value="#{reservationView.service}" style="width:150px">
+				<f:selectItems value="#{reservationView.services}" />
+				<f:ajax render="reservationForm" />
+			</p:selectOneMenu>
+
+			<p:outputLabel for="passengerCount" value="#{msg['reservation.passengerCount']}" />
+			<h:panelGrid columns="1" style="margin-bottom: 10px">
+				<p:inputNumber id="passengerCount" required="true" maxValue="#{configurationService.maxPassengerCount}" value="#{reservationView.passengerCount}"
+					decimalPlaces="0">
+					<f:validateLongRange minimum="1" maximum="#{configurationService.maxPassengerCount}" />
+					<p:clientValidator event="keyup" />
+				</p:inputNumber>
+			</h:panelGrid>
+			<p:outputLabel for="pickupDate" value="#{msg['reservation.pickupDate']}" />
+			<p:calendar id="pickupDate" required="true" locale="#{idiomaBean.currentLanguage}" value="#{reservationView.pickupDate}"
+				mindate="#{reservationView.now}" effect="slide" />
+
+			<p:outputLabel for="flightNumber" value="#{msg['reservation.flightNumber']}"
+				rendered="#{reservationView.service=='AIRPORT' or reservationView.service=='CENTER'}" />
+			<p:inputText id="flightNumber" value="#{reservationView.flightNumber}" maxlength="15"
+				rendered="#{reservationView.service=='AIRPORT' or reservationView.service=='CENTER'}" />
+
+			<p:outputLabel for="guide" value="#{msg['reservation.guide']}" rendered="#{reservationView.service=='TRIP'}" />
+			<p:inputSwitch id="guide" value="#{reservationView.guide}" rendered="#{reservationView.service=='TRIP'}" onLabel="#{msg['reservationView.yes']}"
+				offLabel="#{msg['reservationView.no']}" />
+
+			<p:outputLabel for="name" value="#{msg['reservation.name']}" />
+			<p:inputText id="name" required="true" value="#{reservationView.name}">
+				<f:validateLength minimum="2" maximum="25" />
+				<p:clientValidator event="keyup" />
+			</p:inputText>
+
+			<p:outputLabel for="surname" value="#{msg['reservation.surname']}" />
+			<p:inputText id="surname" required="true" value="#{reservationView.surname}">
+				<f:validateLength minimum="2" maximum="25" />
+				<p:clientValidator event="keyup" />
+			</p:inputText>
+
+			<p:outputLabel for="email" value="#{msg['reservation.email']}" />
+			<p:inputText id="email" required="true" requiredMessage="#{msg['javax.faces.component.UIInput.REQUIRED']}" value="#{reservationView.email}"
+				validatorMessage="Incorrect e-mail…">
+				<f:validateRegex pattern="([^.@]+)(\.[^.@]+)*@([^.@]+\.)+([^.@]+)" />
+				<p:clientValidator event="keyup" />
+			</p:inputText>
+
+			<p:outputLabel for="phoneNumber" value="#{msg['reservation.phoneNumber']}" />
+			<p:inputNumber id="phoneNumber" required="true" value="#{reservationView.phoneNumber}" thousandSeparator=" " decimalPlaces="0" minValue="0" />
+
+			<p:outputLabel for="note" value="#{msg['reservation.note']}" />
+			<p:inputTextarea autoResize="true" id="note" value="#{reservationView.note}" maxlength="500" />
+
+			<p:commandButton value="Save" ajax="false" update="reservationForm" icon="ui-icon-check" validateClient="true"
+				actionListener="#{reservationView.onSubmit}" />
+		</p:panelGrid>
+		<p:separator />
+
+		<p:dialog header="#{msg['reservation.flightNumber']}" widgetVar="dlg1" minHeight="40">
+			<h:outputText value="#{msg['reservationView.success']}" rendered="#{reservationView.orderCompleted == true}" />
+			<h:outputText value="#{msg['reservationView.failure']}" rendered="#{reservationView.orderCompleted == false}" />
+			<f:facet name="footer">
+				<div style="float: right;">
+					<p:commandButton value="OK" oncomplete="PF('dlg1').hide()" action="#{navigationBean.setPage('services')}" />
+				</div>
+			</f:facet>
+		</p:dialog>
+	</h:form>
+
+	<script type="text/javascript">
+		PrimeFaces.locales['cs'] = {
+			closeText : 'Zavřít',
+			prevText : 'Předchozí',
+			nextText : 'Následující',
+			monthNames : [ 'Leden', 'Únor', 'Březen', 'Duben', 'Květen', 'Červen', 'Červenec', 'Srpen', 'Září', 'Říjen', 'Listopad', 'Prosinec' ],
+			monthNamesShort : [ 'Led', 'Úno', 'Bře', 'Dub', 'Kvě', 'Čer', 'Čvc', 'Srp', 'Zář', 'Říj', 'Lis', 'Pro' ],
+			dayNames : [ 'Neděle', 'Pondělí', 'Úterý', 'Středa', 'Čtvrtek', 'Pátek', 'Sobota' ],
+			dayNamesShort : [ 'Ne', 'Po', 'Út', 'St', 'Čt', 'Pá', 'So' ],
+			dayNamesMin : [ 'Ne', 'Po', 'Út', 'St', 'Čt', 'Pá', 'So' ],
+			weekHeader : 'Týden',
+			firstDay : 1,
+			isRTL : false,
+			showMonthAfterYear : false,
+			yearSuffix : '',
+			timeOnlyTitle : 'Pouze čas',
+			timeText : 'Čas',
+			hourText : 'Hodina',
+			minuteText : 'Minuta',
+			secondText : 'Sekunda',
+			currentText : 'Nyní',
+			ampm : false,
+			month : 'Měsíc',
+			week : 'Týden',
+			day : 'Den',
+			allDayText : 'Celý den'
+		};
+
+		PrimeFaces.locales['it'] = {
+			closeText : 'Chiudi',
+			prevText : 'Precedente',
+			nextText : 'Prossimo',
+			monthNames : [ 'Gennaio', 'Febbraio', 'Marzo', 'Aprile', 'Maggio', 'Giugno', 'Luglio', 'Agosto', 'Settembre', 'Ottobre', 'Novembre',
+					'Dicembre' ],
+			monthNamesShort : [ 'Gen', 'Feb', 'Mar', 'Apr', 'Mag', 'Giu', 'Lug', 'Ago', 'Set', 'Ott', 'Nov', 'Dic' ],
+			dayNames : [ 'Domenica', 'Lunedì', 'Martedì', 'Mercoledì', 'Giovedì', 'Venerdì', 'Sabato' ],
+			dayNamesShort : [ 'Dom', 'Lun', 'Mar', 'Mer', 'Gio', 'Ven', 'Sab' ],
+			dayNamesMin : [ 'D', 'L', 'M', 'M ', 'G', 'V ', 'S' ],
+			weekHeader : 'Sett',
+			firstDay : 1,
+			isRTL : false,
+			showMonthAfterYear : false,
+			yearSuffix : '',
+			timeOnlyTitle : 'Solo Tempo',
+			timeText : 'Ora',
+			hourText : 'Ore',
+			minuteText : 'Minuto',
+			secondText : 'Secondo',
+			currentText : 'Data Odierna',
+			ampm : false,
+			month : 'Mese',
+			week : 'Settimana',
+			day : 'Giorno',
+			allDayText : 'Tutto il Giorno'
+		};
+	</script>
+</ui:composition>

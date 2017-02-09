@@ -1,0 +1,24 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://xmlns.jcp.org/jsf/facelets" xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core" xmlns:p="http://primefaces.org/ui">
+<h:head>
+	<title>burza services</title>
+</h:head>
+<h:body>
+	<f:view locale="#{idiomaBean.locale}">
+		<p:layout fullPage="true" widgetVar="layoutWdgt"  >
+			<p:layoutUnit position="north" size="40" resizable="false" closable="false" collapsible="false" >
+				<ui:include src="/WEB-INF/pages/layout/header.xhtml" />
+			</p:layoutUnit>
+
+			<p:layoutUnit position="west" resizable="false" closable="false" collapsible="true" collapsed="false" >
+				<ui:include src="/WEB-INF/pages/layout/menu.xhtml" />
+			</p:layoutUnit>
+			<p:layoutUnit id="centerView" position="center">
+				<p:panel id="centerPanel">
+					<ui:include src="/WEB-INF/pages/#{navigationBean.getPage()}.xhtml" />
+				</p:panel>
+			</p:layoutUnit>
+		</p:layout>
+	</f:view>
+</h:body>
+</html>

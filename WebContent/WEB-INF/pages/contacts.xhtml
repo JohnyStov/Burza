@@ -1,0 +1,36 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:p="http://primefaces.org/ui" xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:h="http://xmlns.jcp.org/jsf/html" xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+	<h2>
+		<h:outputText value="#{msg['menu.contact']}" />
+	</h2>
+	<p:separator />
+	<h:outputText value="#{msg['contactView.text']}" />
+	
+	
+	
+		<h:form id="contactForm">
+		<p:messages id="messages" />
+
+		<p:panelGrid columns="2">
+			<p:outputLabel for="email" value="#{msg['reservation.email']}" />
+			<p:inputText id="email" required="true" requiredMessage="#{msg['javax.faces.component.UIInput.REQUIRED']}" value="#{contactView.email}"
+				validatorMessage="Incorrect e-mail…">
+				<f:validateRegex pattern="([^.@]+)(\.[^.@]+)*@([^.@]+\.)+([^.@]+)" />
+				<p:clientValidator event="keyup" />
+			</p:inputText>
+
+			<p:outputLabel for="subject" value="#{msg['contact.subject']}" />
+			<p:inputText id="subject" required="true" value="#{contactView.subject}">
+				<f:validateLength minimum="2" maximum="25" />
+				<p:clientValidator event="keyup" />
+			</p:inputText>
+
+			<p:outputLabel for="text" value="#{msg['contact.text']}" />
+			<p:inputTextarea autoResize="true" id="text" value="#{contactView.text}" maxlength="500" />
+
+			<p:commandButton value="Odeslat" ajax="false" update="contactView" icon="ui-icon-check" validateClient="true"
+				actionListener="#{contactView.onSubmit}" />
+		</p:panelGrid>
+		<p:separator />
+	</h:form>
+</ui:composition>
